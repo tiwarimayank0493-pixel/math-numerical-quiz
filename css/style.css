@@ -1,0 +1,206 @@
+/* ==========================================================
+   Numerical Quiz - styles
+   Theme: school graph notebook with a red margin line.
+   Colours are CSS variables so light / dark mode is easy to edit.
+   ========================================================== */
+
+:root{
+  --paper:#F3F7FB; --grid:#D9E5F0; --sheet:rgba(255,255,255,.86);
+  --ink:#1B2F6B; --ink-soft:#52618F; --text:#15203F; --line:#C3D3E4;
+  --margin:#D9453F; --marker:#FFE27A; --ok:#17724A; --bad:#C62F2F;
+  --card:#FFFFFF; --onink:#F3F7FB;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+
+/* Dark mode: follows the system setting unless the user picked a theme */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0E1530; --grid:#18244A; --sheet:rgba(14,21,48,.88);
+    --ink:#A8BEFF; --ink-soft:#8C9BC9; --text:#E6ECFF; --line:#2B3B6E;
+    --margin:#F0605A; --marker:#F5D45E; --ok:#5FD3A0; --bad:#FF7B7B;
+    --card:#16204A; --onink:#0E1530;
+  }
+}
+/* Dark mode: picked with the toggle button */
+:root[data-theme="dark"]{
+  --paper:#0E1530; --grid:#18244A; --sheet:rgba(14,21,48,.88);
+  --ink:#A8BEFF; --ink-soft:#8C9BC9; --text:#E6ECFF; --line:#2B3B6E;
+  --margin:#F0605A; --marker:#F5D45E; --ok:#5FD3A0; --bad:#FF7B7B;
+  --card:#16204A; --onink:#0E1530;
+}
+
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+
+body{
+  margin:0; min-height:100vh;
+  font-family:'Hind',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-size:17px; line-height:1.55; color:var(--text);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:24px 24px;
+}
+
+/* The "notebook page" */
+.sheet{
+  position:relative; max-width:780px; margin:0 auto; min-height:100vh;
+  padding:28px 22px 64px 68px; background:var(--sheet);
+  box-shadow:0 0 0 1px var(--line);
+}
+.sheet::before{ /* red margin line */
+  content:""; position:absolute; top:0; bottom:0; left:46px; width:2px;
+  background:var(--margin); opacity:.85;
+}
+@media (max-width:560px){
+  .sheet{padding:20px 14px 48px 40px}
+  .sheet::before{left:26px}
+}
+
+/* Typography */
+.hand{font-family:'Kalam','Hind',cursive}
+h1,h2,h3,legend{font-family:'Kalam','Hind',cursive; color:var(--ink); margin:0; font-weight:700}
+h1{
+  display:inline-block; font-size:clamp(38px,8vw,58px); line-height:1.1;
+  border-bottom:4px double var(--margin); padding-bottom:4px; margin-top:26px;
+}
+h2{font-size:clamp(30px,6vw,40px); line-height:1.2}
+h3{font-size:24px; margin-top:34px}
+.lede{margin:14px 0 26px; max-width:52ch; color:var(--ink-soft); font-size:18px}
+.muted{color:var(--ink-soft)}
+.err{color:var(--bad); font-weight:600; margin:10px 0 0}
+
+/* Theme toggle */
+.theme{
+  position:absolute; top:14px; right:14px; font:inherit; font-size:14px;
+  color:var(--ink); background:transparent; border:1.5px solid var(--line);
+  border-radius:20px; padding:3px 12px; cursor:pointer;
+}
+.theme:hover{border-color:var(--ink)}
+
+/* Settings form */
+fieldset{border:0; margin:0 0 22px; padding:0; min-width:0}
+legend{font-size:24px; padding:0; margin-bottom:8px}
+
+.checks{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+@media (max-width:560px){.checks{grid-template-columns:1fr}}
+.check{
+  position:relative; display:flex; align-items:center; gap:12px; cursor:pointer;
+  border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; background:var(--card);
+}
+.check input{position:absolute; opacity:0; inset:0; width:100%; height:100%; margin:0; cursor:pointer}
+.check .box{
+  flex:none; width:22px; height:22px; border:2px solid var(--ink); border-radius:4px; position:relative;
+}
+.check input:checked ~ .box::after{ /* tick mark */
+  content:""; position:absolute; left:6px; top:1px; width:6px; height:12px;
+  border:solid var(--ink); border-width:0 3px 3px 0; transform:rotate(40deg);
+}
+.check:has(input:checked){border-color:var(--ink)}
+.check input:focus-visible ~ .box{outline:3px solid var(--ink); outline-offset:3px}
+.check .txt b{display:block; font-weight:600; line-height:1.25}
+.check .txt small{display:block; color:var(--ink-soft); font-size:14px; line-height:1.3}
+
+.seg{display:flex; flex-wrap:wrap; gap:8px}
+.seg label{position:relative; cursor:pointer}
+.seg input{position:absolute; opacity:0; inset:0; margin:0; width:100%; height:100%; cursor:pointer}
+.seg span{
+  display:block; padding:6px 16px; border:1.5px solid var(--ink); border-radius:8px;
+  color:var(--ink); background:var(--card); font-weight:500;
+}
+.seg input:checked + span{background:var(--ink); color:var(--onink)}
+.seg input:focus-visible + span{outline:3px solid var(--ink); outline-offset:3px}
+
+/* Buttons */
+.btn{
+  font:inherit; font-weight:600; cursor:pointer; color:var(--ink); background:transparent;
+  border:1.5px solid var(--ink); border-radius:8px; padding:9px 20px;
+}
+.btn:hover{background:var(--card)}
+.btn.primary{
+  font-family:'Kalam','Hind',cursive; font-size:22px; font-weight:700; line-height:1.3;
+  color:var(--onink); background:var(--ink); padding:8px 26px;
+  box-shadow:3px 3px 0 var(--margin);
+}
+.btn.primary:hover{transform:translate(1px,1px); box-shadow:2px 2px 0 var(--margin)}
+.btn:focus-visible,.linkbtn:focus-visible,.theme:focus-visible,input[type=text]:focus-visible,summary:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+.linkbtn{
+  font:inherit; color:var(--ink); background:none; border:0; padding:4px 0; cursor:pointer;
+  text-decoration:underline; text-underline-offset:3px;
+}
+.startrow,.btnrow{display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:22px}
+
+/* Quiz screen */
+.topbar{display:flex; flex-wrap:wrap; gap:6px 22px; align-items:baseline; margin-top:34px; color:var(--ink-soft)}
+.topbar b{font-family:'Kalam',cursive; font-size:24px; color:var(--ink); font-weight:700}
+.topbar .grow{flex:1}
+#timerWrap.low b{color:var(--bad)}
+.bar{height:8px; background:var(--line); border-radius:4px; overflow:hidden; margin-top:8px}
+.fill{height:100%; width:0; background:var(--ink); transition:width .3s ease}
+.topic{margin:22px 0 2px; color:var(--ink-soft); font-size:15px}
+.qbox{ /* question written on ruled lines */
+  font-family:'Kalam','Hind',cursive; font-size:clamp(22px,4.6vw,27px); line-height:44px; color:var(--text);
+  min-height:132px; padding:0 4px;
+  background-image:repeating-linear-gradient(to bottom, transparent 0 43px, var(--line) 43px 44px);
+}
+.ansrow{display:flex; align-items:baseline; flex-wrap:wrap; gap:10px 14px; margin-top:20px}
+.ansrow label{font-family:'Kalam',cursive; font-size:24px; color:var(--ink); font-weight:700}
+.ansrow input{
+  font-family:'Kalam',cursive; font-size:32px; font-weight:700; color:var(--text);
+  width:min(260px,100%); background:transparent; border:0; border-bottom:2px solid var(--ink);
+  padding:0 4px; border-radius:0;
+}
+.ansrow input:disabled{opacity:.8}
+
+/* Feedback box with the hand-drawn tick / cross */
+.fb{
+  display:flex; gap:16px; align-items:flex-start; margin-top:24px; padding:16px 18px;
+  background:var(--card); border:1.5px solid var(--line); border-left-width:5px; border-radius:8px;
+}
+.fb.ok{border-left-color:var(--ok)}
+.fb.bad{border-left-color:var(--bad)}
+.fb h3{margin:0; font-size:26px}
+.fb.ok h3{color:var(--ok)}
+.fb.bad h3{color:var(--bad)}
+.fb p{margin:4px 0 0}
+.fb .exp{color:var(--ink-soft)}
+.mark{flex:none; width:54px; height:54px}
+.mark path{fill:none; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:90; stroke-dashoffset:90; animation:draw .5s ease-out forwards}
+.mark.ok path{stroke:var(--ok)}
+.mark.bad path{stroke:var(--bad)}
+.mark.bad path + path{animation-delay:.25s}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+/* Result screen */
+.scorewrap{display:flex; flex-wrap:wrap; align-items:center; gap:10px 34px; margin:22px 0 10px}
+.score{position:relative; width:230px; height:120px; display:grid; place-items:center; flex:none}
+.score span{font-family:'Kalam',cursive; font-weight:700; font-size:56px; color:var(--ink); line-height:1}
+.score svg{position:absolute; inset:0; width:100%; height:100%; overflow:visible}
+.score path{fill:none; stroke:var(--margin); stroke-width:4; stroke-linecap:round; stroke-dasharray:720; stroke-dashoffset:720; animation:draw2 1.1s .2s ease-out forwards}
+@keyframes draw2{to{stroke-dashoffset:0}}
+.remark{margin:0; font-family:'Kalam',cursive; font-size:24px; color:var(--text); max-width:22ch; line-height:1.35}
+.stats{display:flex; flex-wrap:wrap; margin:18px 0 6px}
+.stats div{padding:2px 22px; border-left:1.5px solid var(--line)}
+.stats div:first-child{padding-left:0; border-left:0}
+.stats b{display:block; font-family:'Kalam',cursive; font-size:32px; color:var(--ink); line-height:1.2}
+.stats span{color:var(--ink-soft); font-size:15px}
+.inline{display:inline-flex; gap:8px; align-items:center; margin-top:8px; cursor:pointer}
+.review{list-style:none; margin:14px 0 0; padding:0}
+.review li{padding:14px 0; border-bottom:1.5px solid var(--line); display:flex; gap:14px}
+.review .sym{flex:none; width:28px; font-family:'Kalam',cursive; font-size:26px; font-weight:700; line-height:1.2}
+.review li.ok .sym{color:var(--ok)}
+.review li.bad .sym{color:var(--bad)}
+.review .rq{font-family:'Kalam',cursive; font-size:20px; line-height:1.4}
+.review .ra{margin-top:2px; font-size:15.5px}
+.review .re{margin-top:2px; font-size:15px; color:var(--ink-soft)}
+.review.onlywrong li.ok{display:none}
+
+/* Respect the "reduce motion" setting */
+@media (prefers-reduced-motion: reduce){
+  .mark path,.score path{animation:none; stroke-dashoffset:0}
+  .fill{transition:none}
+}
